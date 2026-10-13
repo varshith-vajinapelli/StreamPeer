@@ -4,15 +4,20 @@ peer-to-peer live video streaming in C++ using POSIX sockets, FFmpeg(H.264) & Op
 
 ## How It Works
 
-A webcam frame is captured using OpenCV, encodes them using H.264 through FFmpeg, and transmits the compressed frames data directly to another peer over TCP connection using POSIX sockets. The receiver decodes the incoming H.264 stream and displays the reconstructed frames. 
+A webcam frame is captured using OpenCV, encodes them using H.264 through FFmpeg, and transmits the compressed frames data directly to another peer over TCP connection using POSIX sockets. The receiver decodes the incoming H.264 stream and displays the reconstructed frames.
 
 No WebRTC, cloud infrastructure, or browser is involved.
+
+## AI Policy
+
+No AI-written code. Built by hand, following the spirit of [Rust's LLM policy](https://forge.rust-lang.org/policies/llm-usage.html).
+Ask me anything.
 
 ## Tech
 
 C++17, OpenCV, POSIX sockets & FFmpeg (H.264)
 
-
 ## Documentation
 
 - [OpenCV Notes](docs/opencv.md)
+- [FFmpeg Notes](docs/FFmpeg)
