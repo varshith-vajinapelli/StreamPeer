@@ -14,7 +14,7 @@ int captureVideo()
     int apiId = cv::CAP_ANY;
     unsigned long int totalVideoSize = 0;
 
-    capture.open("Screen Recording 2026-02-23 202440.mp4", apiId);
+    capture.open(deviceId, apiId);
 
     // check if opened!
     if (!capture.isOpened())
@@ -22,6 +22,18 @@ int captureVideo()
         std::cout << "The camera failed to open" << std::endl;
         return 1;
     }
+
+    // sets the property id and value to it!
+    // The set may retuns the True if set but it may be incorrect, sue the set to get the values
+    // if they are actually set! and using the static public member fucntion of the VideoCapture
+
+    static int codec = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
+    capture.set(cv::CAP_PROP_FOURCC, codec);
+
+    // sets the frame width & height
+    capture.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+    capture.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+    capture.set(cv::CAP_PROP_FPS, 15);
 
     // grab and write
     while (true)
@@ -39,10 +51,8 @@ int captureVideo()
         totalVideoSize += frame.total() * frame.elemSize();
         std::cout << "TotalVideoSize: " << totalVideoSize << std::endl;
 
-        // TODO: Resize the frame if needed using the resize fucntion?
-
         cv::imshow("Live", frame);
-        int key = cv::waitKey(33);
+        int key = cv::waitKey(1);
 
         if (key == 'c' || key == 'q')
         {
