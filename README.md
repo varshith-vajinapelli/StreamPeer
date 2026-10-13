@@ -20,4 +20,4 @@ C++17, OpenCV, POSIX sockets & FFmpeg (H.264)
 ## Documentation
 
 - [OpenCV Notes](docs/opencv.md)
-- [FFmpeg Notes](docs/FFmpeg)
+- [FFmpeg Notes](docs/FFmpeg.md)
