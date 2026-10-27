@@ -5,20 +5,73 @@
 
 #include <iostream>
 
-int captureVideo()
+enum class CameraStatus
+{
+    Disconnected,
+    Connected,
+    Recording,
+};
+
+struct CameraConfig
+{
+    int deviceId{0};
+    int apiId = cv::CAP_ANY;
+    int width{640};
+    int height{480};
+    int fps{15};
+    CameraStatus cameraStatus{CameraStatus::Disconnected};
+
+    // TODO Real Implementation is needed in future!
+    void connectCamera()
+    {
+        cameraStatus = CameraStatus::Connected;
+    }
+
+    bool startRecoding()
+    {
+        if (cameraStatus == CameraStatus::Connected)
+        {
+            cameraStatus = CameraStatus::Recording;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool setResolution(int width, int height)
+    {
+        if (width <= 0 || height <= 0)
+        {
+            return false;
+        }
+
+        this->width = width;
+        this->height = height;
+        return true;
+    }
+};
+
+void displayCameraInfo(const CameraConfig &config)
+{
+    std::cout << "Width: " << config.width << '\n';
+    std::cout << "Height: " << config.height << '\n';
+    std::cout << "FPS: " << config.fps << '\n';
+}
+
+int captureVideo(CameraConfig &config)
 {
     cv::Mat frame;
     cv::VideoCapture capture;
 
-    int deviceId = 0;
-    int apiId = cv::CAP_ANY;
-    unsigned long int totalVideoSize = 0;
+    capture.open(config.deviceId, config.apiId);
 
-    capture.open(deviceId, apiId);
+    // change all the direct varible assignment to memebr functions
+    config.cameraStatus = CameraStatus::Connected;
 
-    // check if opened!
     if (!capture.isOpened())
     {
+        // change the camera status in the object
+        config.cameraStatus = CameraStatus::Disconnected;
         std::cout << "The camera failed to open" << std::endl;
         return 1;
     }
@@ -31,11 +84,12 @@ int captureVideo()
     capture.set(cv::CAP_PROP_FOURCC, codec);
 
     // sets the frame width & height
-    capture.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-    capture.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
-    capture.set(cv::CAP_PROP_FPS, 15);
+    capture.set(cv::CAP_PROP_FRAME_WIDTH, config.width);
+    capture.set(cv::CAP_PROP_FRAME_HEIGHT, config.height);
+    capture.set(cv::CAP_PROP_FPS, config.fps);
 
     // grab and write
+    config.cameraStatus = CameraStatus::Recording;
     while (true)
     {
         // capture the frame from the camera
@@ -47,26 +101,25 @@ int captureVideo()
             break;
         }
 
-        // Using size of one pixel bytes * Number of pixels, calcaultes the total frame size in bytes!
-        totalVideoSize += frame.total() * frame.elemSize();
-        std::cout << "TotalVideoSize: " << totalVideoSize << std::endl;
-
         cv::imshow("Live", frame);
         int key = cv::waitKey(1);
 
         if (key == 'c' || key == 'q')
         {
             std::cout << "Exiting.." << std::endl;
+            config.cameraStatus = CameraStatus::Disconnected;
             break;
         }
     }
-    std::cout << "TotalVideoSize: " << totalVideoSize << std::endl;
     return 0;
 }
 
 int main()
 {
-    int status = captureVideo();
+    CameraConfig config{};
 
-    return status;
+    // Defauly Camera Config
+    displayCameraInfo(config);
+
+    return captureVideo(config);
 }
