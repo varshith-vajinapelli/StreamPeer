@@ -1,4 +1,4 @@
-# StreamPeer
+# StreamPeer (InProgress)
 
 peer-to-peer live video streaming in C++ using POSIX sockets, FFmpeg(H.264) & OpenCV.
 
