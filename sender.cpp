@@ -12,7 +12,7 @@ enum class CameraStatus
     Recording,
 };
 
-struct CameraConfig
+struct Camera
 {
     int deviceId{0};
     int apiId = cv::CAP_ANY;
@@ -51,14 +51,14 @@ struct CameraConfig
     }
 };
 
-void displayCameraInfo(const CameraConfig &config)
+void displayCameraInfo(const Camera &config)
 {
     std::cout << "Width: " << config.width << '\n';
     std::cout << "Height: " << config.height << '\n';
     std::cout << "FPS: " << config.fps << '\n';
 }
 
-int captureVideo(CameraConfig &config)
+int captureVideo(Camera &config)
 {
     cv::Mat frame;
     cv::VideoCapture capture;
@@ -116,7 +116,7 @@ int captureVideo(CameraConfig &config)
 
 int main()
 {
-    CameraConfig config{};
+    Camera config{};
 
     // Defauly Camera Config
     displayCameraInfo(config);
